@@ -1,8 +1,13 @@
-"""ENN experiment on the UCI Waveform+Noise dataset."""
+"""**Code sau khi sửa theo phần feedback**"""
 
-from pathlib import Path
-
+# =====================================================
+# ENN EXPERIMENT ON WAVEFORM-NOISE DATASET
+# =====================================================
+# =====================================================
+# 1. IMPORT LIBRARIES
+# =====================================================
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
@@ -15,34 +20,27 @@ from sklearn.metrics import (
     classification_report
 )
 from imblearn.under_sampling import EditedNearestNeighbours
-
 # =====================================================
-# 1. LOAD DATASET
+# 2. LOAD DATASET
 # =====================================================
-DATASET_PATH = Path(__file__).resolve().parents[1] / "datasets" / "waveform_noise.csv"
-
-df = pd.read_csv(DATASET_PATH)
-
-print("========== DATASET ==========")
-print("Path:", DATASET_PATH)
-print("Shape:", df.shape)
-print()
+file_path = "waveform-+noise.data"
+df = pd.read_csv(
+    file_path,
+    header=None
+)
 print("========== DATASET HEAD ==========")
 print(df.head())
 print()
-
 # =====================================================
-# 2. DEFINE FEATURES AND LABELS
+# 3. DEFINE FEATURES AND LABELS
 # =====================================================
-X = df.drop(columns=["class"])
-y = df["class"]
-
+X = df.iloc[:, :-1]
+y = df.iloc[:, -1]
 print("========== CLASS DISTRIBUTION ==========")
 print(y.value_counts().sort_index())
 print()
-
 # =====================================================
-# 3. TRAIN / TEST SPLIT
+# 4. TRAIN / TEST SPLIT
 # =====================================================
 X_train, X_test, y_train, y_test = train_test_split(
     X,
@@ -55,16 +53,14 @@ print("========== TRAIN / TEST SIZE ==========")
 print("Train Size:", X_train.shape)
 print("Test Size :", X_test.shape)
 print()
-
 # =====================================================
-# 4. STANDARDIZATION
+# 5. STANDARDIZATION
 # =====================================================
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
-
 # =====================================================
-# 5. BASELINE MODEL (WITHOUT ENN)
+# 6. BASELINE MODEL (WITHOUT ENN)
 # =====================================================
 print("========================================")
 print("BASELINE MODEL (WITHOUT ENN)")
@@ -121,9 +117,8 @@ print(classification_report(
     y_pred_baseline
 ))
 print()
-
 # =====================================================
-# 6. ENN EXPERIMENTS
+# 7. ENN EXPERIMENTS
 # =====================================================
 enn_values = [3, 5, 7]
 for k in enn_values:
@@ -240,7 +235,7 @@ for k in enn_values:
     print()
 
 # =====================================================
-# 7. FINISH
+# 8. FINISH
 # =====================================================
 print("========================================")
 print("EXPERIMENT FINISHED")
